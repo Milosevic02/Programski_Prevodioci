@@ -14,6 +14,7 @@
 %token  _WORD
 %token _UPITNIK
 %token _UZVICNIK
+%token _ZAREZ
 
 %%
 
@@ -33,6 +34,7 @@ end
   
 words 
   : _CAPITAL_WORD
+  |words _ZAREZ
   | words _WORD
   | words _CAPITAL_WORD    
   ;
