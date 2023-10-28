@@ -7,6 +7,7 @@
   int upitnih = 0;
   int uzvicnih = 0;
   int izjavnih = 0;
+  int pasus = 0;
 %}
 
 %token  _DOT
@@ -15,14 +16,20 @@
 %token _UPITNIK
 %token _UZVICNIK
 %token _ZAREZ
+%token _PASUS
 
 %%
 
-text 
-  : sentence
-  | text sentence
-  ;
-          
+
+text
+  :paragraph _PASUS {pasus++;}
+  |text paragraph _PASUS {pasus++;}
+  ;     
+ 
+paragraph
+  :sentence
+  |paragraph sentence;
+      
 sentence 
   : words end 
   ;
@@ -44,6 +51,7 @@ words
 int main() {
   yyparse();
   printf("Izjavnih recencia : %d\nUpitnih recenica : %d\nUzvicnih recenica : %d\n",izjavnih,upitnih,uzvicnih);
+  printf("Pasusa:%d\n",pasus);
 }
 
 int yyerror(char *s) {
