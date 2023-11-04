@@ -14,6 +14,10 @@
 "if"                 { return _IF; }
 "else"               { return _ELSE; }
 "return"             { return _RETURN; }
+"select"             { return _SELECT; }
+"from"               { return _FROM; }
+"where"             { return _WHERE; }
+
 
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }

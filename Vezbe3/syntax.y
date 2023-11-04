@@ -24,6 +24,9 @@
 %token _AROP
 %token _RELOP
 %token _COMMA
+%token _SELECT
+%token _FROM
+%token _WHERE
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -80,6 +83,11 @@ statement
   | assignment_statement
   | if_statement
   | return_statement
+  | select_statement
+  ;
+  
+select_statement
+  : _SELECT vars _FROM _ID _WHERE _LPAREN rel_exp _RPAREN _SEMICOLON
   ;
 
 compound_statement

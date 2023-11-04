@@ -1,10 +1,6 @@
 int abs(int i) {
   int res,a;
-  if(i < 0)
-    res = 0 - i;
-  else 
-    res = i;
-  return res;
+  select a,b,c from details where (a > 4);
 }
 
 int main() {
