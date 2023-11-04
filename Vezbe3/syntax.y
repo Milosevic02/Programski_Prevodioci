@@ -23,6 +23,7 @@
 %token _SEMICOLON
 %token _AROP
 %token _RELOP
+%token _COMMA
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -61,7 +62,12 @@ variable_list
   ;
 
 variable
-  : type _ID _SEMICOLON
+  : type vars  _SEMICOLON
+  ;
+  
+vars
+  :_ID
+  |vars _COMMA _ID 
   ;
 
 statement_list
