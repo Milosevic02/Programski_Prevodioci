@@ -29,6 +29,8 @@
 "="                  { return _ASSIGN; }
 ","                  { return _COMMA; }
 
+"++"                  { return _INC; }
+
 
 "+"                  { return _AROP; }
 "-"                  { return _AROP; }

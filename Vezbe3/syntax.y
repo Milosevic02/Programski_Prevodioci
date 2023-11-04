@@ -29,6 +29,7 @@
 %token _WHERE
 %token _DO
 %token _WHILE
+%token _INC
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -70,6 +71,7 @@ variable
   : type vars  _SEMICOLON
   ;
   
+  
 vars
   :_ID
   |vars _COMMA _ID 
@@ -87,6 +89,11 @@ statement
   | return_statement
   | select_statement
   |do_while_statement
+  |inc_statement
+  ;
+  
+inc_statement
+  :_ID _INC _SEMICOLON
   ;
   
 do_while_statement
@@ -112,6 +119,7 @@ num_exp
 exp
   : literal
   | _ID
+  |_ID _INC
   | function_call
   | _LPAREN num_exp _RPAREN
   ;
