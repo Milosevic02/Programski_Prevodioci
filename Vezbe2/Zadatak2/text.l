@@ -8,6 +8,7 @@
 [ \t\n]+    { /* skip */ }
 
 "."         { return _DOT; }
+","         { return _ZAREZ; }
 "?"         { return _UPITNIK; }
 "!"         { return _UZVICNIK; }
 [A-Z][a-z]* { return _CAPITAL_WORD; }
