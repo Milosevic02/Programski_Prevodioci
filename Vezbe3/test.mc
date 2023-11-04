@@ -1,6 +1,10 @@
 int abs(int i) {
-  int res,a;
-  select a,b,c from details where (a > 4);
+  int res,a,b,t;
+  do{
+  	select a,b,c from details where (a > 4);
+  }while(a > 5);
+  
+
 }
 
 int main() {

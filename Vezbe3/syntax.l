@@ -17,6 +17,8 @@
 "select"             { return _SELECT; }
 "from"               { return _FROM; }
 "where"             { return _WHERE; }
+"do"                { return _DO; }
+"while"             { return _WHILE; }
 
 
 "("                  { return _LPAREN; }

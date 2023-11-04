@@ -27,6 +27,8 @@
 %token _SELECT
 %token _FROM
 %token _WHERE
+%token _DO
+%token _WHILE
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -84,7 +86,11 @@ statement
   | if_statement
   | return_statement
   | select_statement
+  |do_while_statement
   ;
+  
+do_while_statement
+ : _DO statement _WHILE _LPAREN rel_exp _RPAREN _SEMICOLON
   
 select_statement
   : _SELECT vars _FROM _ID _WHERE _LPAREN rel_exp _RPAREN _SEMICOLON
