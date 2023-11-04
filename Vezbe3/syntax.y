@@ -61,6 +61,7 @@ type
 parameter
   : /* empty */
   | type _ID
+  | parameter _COMMA type _ID
   ;
 
 body
@@ -151,6 +152,7 @@ function_call
 argument
   : /* empty */
   | num_exp
+  |argument _COMMA num_exp
   ;
 
 if_statement
