@@ -19,6 +19,11 @@
 "where"             { return _WHERE; }
 "do"                { return _DO; }
 "while"             { return _WHILE; }
+"for"             { return _FOR; }
+"to"|"downto"         {return _DIRECTION;}
+"step" 			{return _STEP;}
+"next" 			{return _NEXT;}
+
 
 
 "("                  { return _LPAREN; }

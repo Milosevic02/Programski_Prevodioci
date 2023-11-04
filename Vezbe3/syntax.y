@@ -30,6 +30,11 @@
 %token _DO
 %token _WHILE
 %token _INC
+%token _FOR
+%token _STEP
+%token _NEXT
+%token _DIRECTION
+
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -90,6 +95,16 @@ statement
   | select_statement
   |do_while_statement
   |inc_statement
+  |for_statement
+  ;
+  
+for_statement
+  : _FOR _ID _ASSIGN literal _DIRECTION literal step  statement _NEXT _ID
+  ;
+ 
+step 
+  :
+  | _STEP literal
   ;
   
 inc_statement
