@@ -16,6 +16,7 @@
   int var_num = 0;
   int fun_idx = -1;
   int fcall_idx = -1;
+  int ret = 0;
 %}
 
 %union {
@@ -70,6 +71,9 @@ function
       }
     _LPAREN parameter _RPAREN body
       {
+      	if((ret == 0) && (get_type(fun_idx) != VOID))
+      		warn("Function should return a value");
+      	ret = 0;
         clear_symbols(fun_idx + 1);
         var_num = 0;
       }
@@ -220,9 +224,21 @@ rel_exp
 return_statement
   : _RETURN num_exp _SEMICOLON
       {
+      	ret = 1;
+      	if(get_type(fun_idx) == VOID){
+      		err("Void function cant have return");
+      	}
         if(get_type(fun_idx) != get_type($2))
           err("incompatible types in return");
+          
+        
       }
+  | _RETURN _SEMICOLON
+  	{
+  		ret = 1;
+  		if(get_type(fun_idx) != VOID)
+  			warn("Function isnt void and should return something");
+  	}
   ;
 
 %%
