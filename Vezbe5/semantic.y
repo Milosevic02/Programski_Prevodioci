@@ -82,7 +82,7 @@ parameter
   | _TYPE _ID
       {
       	if($1 == VOID){
-      		err("Parameter cannot be of VOID type")
+      		err("Parameter cannot be of VOID type");
       	}
         insert_symbol($2, PAR, $1, 1, NO_ATR);
         set_atr1(fun_idx, 1);
@@ -103,7 +103,7 @@ variable
   : _TYPE _ID _SEMICOLON
       {
       	 if($1 == VOID){
-      		err("variable cannot be of VOID type")
+      		err("variable cannot be of VOID type");
       	}
         if(lookup_symbol($2, VAR|PAR) == NO_INDEX)
            insert_symbol($2, VAR, $1, ++var_num, NO_ATR);
