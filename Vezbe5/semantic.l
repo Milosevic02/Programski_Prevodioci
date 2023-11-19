@@ -24,6 +24,7 @@
 "{"                  { return _LBRACKET; }
 "}"                  { return _RBRACKET; }
 ";"                  { return _SEMICOLON; }
+":"                  { return _COLON; }
 ","                  { return _COMMA; }
 "="                  { return _ASSIGN; }
 "++"                  { return _INC; }
@@ -33,6 +34,10 @@
 "second"                  { return _SECOND; }
 "third"                  { return _THIRD; }
 "otherwise"                  { return _OTHERWISE; }
+"switch"                  { return _SWITCH; }
+"case"                  { return _CASE; }
+"break"                  { return _BREAK; }
+"default"                  { return _DEFAULT; }
 
 "+"                  { yylval.i = ADD; return _AROP; }
 "-"                  { yylval.i = SUB; return _AROP; }

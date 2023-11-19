@@ -18,6 +18,9 @@
   int fcall_idx = -1;
   int ret = 0;
   int pom=0;
+  int case_count = 0;
+  int case_type = 0;
+  int case_array[100];
 %}
 
 %union {
@@ -46,6 +49,12 @@
 %token _THIRD
 %token _OTHERWISE
 %token _COMMA
+%token _SWITCH
+%token _CASE
+%token _BREAK
+%token _DEFAULT
+%token _COLON
+
 
 %token <i> _AROP
 %token <i> _RELOP
@@ -138,7 +147,56 @@ statement
   | return_statement
   |for_statement
   |branch_statement
+  |switch_statement
   ;
+  
+switch_statement
+  : _SWITCH _LPAREN _ID 
+  {
+  	case_type = lookup_symbol($3, VAR|PAR);
+  	if(case_type == NO_INDEX)
+		err("undefine var");
+  
+  }
+  _RPAREN _LBRACKET case_statements default_statement _RBRACKET
+  { case_count = 0;}
+  ;
+ 
+case_statements
+  : case_statement
+  | case_statements case_statement
+  ;
+  
+case_statement
+  : _CASE literal
+  {
+  	int i = 0;
+  	while(i != case_count){
+  		if(case_array[i] == $2){
+  			err("duplicated constant in case");
+  			break;
+  		}
+  		i++;
+  	}
+  	if(i == case_count){
+  		case_array[i] = $2;
+  		case_count++;
+  	}
+  	if(get_type($2) != get_type(case_type))
+  		err("Different type");
+  }
+  _COLON statement break_statement
+  ;
+ 
+break_statement
+  : 
+  | _BREAK _SEMICOLON
+  ;
+  
+default_statement
+  : 
+  | _DEFAULT _COLON statement;
+
   
 branch_statement
   : _BRANCH _LPAREN _ID
