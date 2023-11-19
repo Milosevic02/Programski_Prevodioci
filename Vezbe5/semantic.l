@@ -24,9 +24,15 @@
 "{"                  { return _LBRACKET; }
 "}"                  { return _RBRACKET; }
 ";"                  { return _SEMICOLON; }
+","                  { return _COMMA; }
 "="                  { return _ASSIGN; }
 "++"                  { return _INC; }
 "for"                  { return _FOR; }
+"branch"                  { return _BRANCH; }
+"first"                  { return _FIRST; }
+"second"                  { return _SECOND; }
+"third"                  { return _THIRD; }
+"otherwise"                  { return _OTHERWISE; }
 
 "+"                  { yylval.i = ADD; return _AROP; }
 "-"                  { yylval.i = SUB; return _AROP; }

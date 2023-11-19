@@ -17,6 +17,7 @@
   int fun_idx = -1;
   int fcall_idx = -1;
   int ret = 0;
+  int pom=0;
 %}
 
 %union {
@@ -39,6 +40,12 @@
 %token _SEMICOLON
 %token _FOR
 %token _INC
+%token _BRANCH
+%token _FIRST
+%token _SECOND
+%token _THIRD
+%token _OTHERWISE
+%token _COMMA
 
 %token <i> _AROP
 %token <i> _RELOP
@@ -130,7 +137,42 @@ statement
   | if_statement
   | return_statement
   |for_statement
+  |branch_statement
   ;
+  
+branch_statement
+  : _BRANCH _LPAREN _ID
+  	{
+  		if(lookup_symbol($3,VAR|PAR) == NO_INDEX)
+  			err("Not declared var");
+  	}
+  	 _SEMICOLON literal
+  	 {
+  	 	int idx = lookup_symbol($3,VAR|PAR);
+  	 	if(get_type(idx) != get_type($6))
+  	 		err("Different Type");
+  	 	pom = atoi(get_name($6));
+  	 
+	}
+  	  _COMMA literal
+  	 {
+  	 	if(pom > atoi(get_name($9)))
+  	 		err("must be ASC");
+  	 	if(get_type($6) != get_type($9))
+  	 		err("Different Type");
+  	 	 pom = atoi(get_name($9));
+  	 	
+  	 }
+  	 
+  	  _COMMA literal 
+  	 {
+  	 	if(pom > atoi(get_name($12)))
+  	 		err("must be ASC");
+  	 	if(get_type($9) != get_type($12))
+  	 		err("Different Type");
+  	 	pom = 0;
+  	 } 
+  	 _RPAREN _FIRST statement _SECOND statement _THIRD statement _OTHERWISE statement  
   
 for_statement
   : _FOR _LPAREN _TYPE _ID
