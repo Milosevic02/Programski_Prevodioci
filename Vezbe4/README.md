@@ -2,18 +2,18 @@
 
 Here you can find solutions and programs for this tasks.
 
-### Task 10.1
+### Task 1.1
 
 **Task Description:** Extension of the grammar so that multiple variables can be declared in one declaration, separated by commas. Implementation of semantic checks:
 1. A variable must not be previously declared.
 2. Local identifiers must be unique.
 
-### Task 10.2
+### Task 1.2
 
 **Task Description:** Extension of miniC expressions with the post-increment operator. Implementation of semantic check:
 1. The post-increment operator can only be applied to variables and parameters (not, for example, to functions).
 
-### Task 10.3
+### Task 1.3
 
 **Task Description:** Extension of miniC grammar with the do-while statement. The syntax of the do-while statement is:
 ```c
@@ -25,7 +25,7 @@ Implementation of semantic checks:
 1. `<id>` must be an existing variable or parameter.
 2. `<id>` and `<lit>` must be of the same type.
 
-### Task 10.4
+### Task 1.4
 
 **Task Description:** Extension of miniC grammar with multiple assignments:
 ```c
