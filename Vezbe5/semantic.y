@@ -37,6 +37,9 @@
 %token _RBRACKET
 %token _ASSIGN
 %token _SEMICOLON
+%token _FOR
+%token _INC
+
 %token <i> _AROP
 %token <i> _RELOP
 
@@ -126,6 +129,35 @@ statement
   | assignment_statement
   | if_statement
   | return_statement
+  |for_statement
+  ;
+  
+for_statement
+  : _FOR _LPAREN _TYPE _ID
+  			{
+  				int i = lookup_symbol($4, VAR|PAR);
+  			        if( i == NO_INDEX)
+				   $<i>$ = insert_symbol($4, VAR, $3, ++var_num, NO_ATR);
+				else 
+				   err("redefinition of '%s'", $4);
+  				
+  			}
+  			 _ASSIGN literal 
+  			 {
+  			 	if($3 != get_type($7)){
+  			 		err("Different type");
+  			 	}
+  			 }
+  			 _SEMICOLON rel_exp _SEMICOLON _ID 
+  			 {
+  			 	
+  			 	if($<i>5 != lookup_symbol($12,VAR))
+  			 		err("Different _IDs");
+  			 }
+  			 _INC _RPAREN statement
+  			 {
+  			 	clear_symbols($<i>5);
+  			 }
   ;
 
 compound_statement
