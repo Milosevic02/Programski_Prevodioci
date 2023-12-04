@@ -15,6 +15,7 @@
 "if"                 { return _IF; }
 "else"               { return _ELSE; }
 "return"             { return _RETURN; }
+"while"             { return _WHILE; }
 
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }

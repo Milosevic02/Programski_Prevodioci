@@ -19,6 +19,7 @@
   int fun_idx = -1;
   int fcall_idx = -1;
   int lab_num = -1;
+  int while_num = -1;
   FILE *output;
 %}
 
@@ -40,6 +41,7 @@
 %token _RBRACKET
 %token _ASSIGN
 %token _SEMICOLON
+%token _WHILE
 %token <i> _AROP
 %token <i> _RELOP
 
@@ -154,7 +156,25 @@ statement
   | assignment_statement
   | if_statement
   | return_statement
+  | while_statement
   ;
+  
+while_statement
+  : _WHILE
+  {
+   $<i>$ = ++while_num
+   code("\n@while_%d:",while_num);
+  }
+   _LPAREN rel_exp _RPAREN
+  {
+   code("\n\t\t%s\t@end_while_%d",opp_jumps[$4],while_num);
+  } statement
+  {
+  	code("\n\t\tJMP\t@while_%d",$<i>2);
+  	code("\n@end_while_%d:",$<i>2);
+  }
+  ;
+  
 
 compound_statement
   : _LBRACKET statement_list _RBRACKET
