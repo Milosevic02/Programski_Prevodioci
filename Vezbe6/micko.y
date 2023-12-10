@@ -162,7 +162,7 @@ statement
 while_statement
   : _WHILE
   {
-   $<i>$ = ++while_num
+   $<i>$ = ++while_num;
    code("\n@while_%d:",while_num);
   }
    _LPAREN rel_exp _RPAREN
