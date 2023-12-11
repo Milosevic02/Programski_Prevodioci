@@ -40,11 +40,14 @@
 %token _RBRACKET
 %token _ASSIGN
 %token _SEMICOLON
+%token _QMARK
+%token _COLON
 %token <i> _AROP
 %token <i> _RELOP
 
+
 %type <i> num_exp exp literal
-%type <i> function_call argument rel_exp if_part
+%type <i> function_call argument rel_exp if_part cond_exp
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -201,6 +204,7 @@ exp
   	code("\n\t\t%s\t@false%d",opp_jumps[$2],lab_num);
   	code("\n@true%d:",lab_num);
   	gen_mov($5,out);
+  	code("\n\t\tJMP \t@exit%d",lab_num);
   	
   	code("\n@false%d:",lab_num);
   	gen_mov($7,out);
