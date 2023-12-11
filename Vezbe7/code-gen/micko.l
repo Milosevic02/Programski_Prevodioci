@@ -15,6 +15,7 @@
 "if"                 { return _IF; }
 "else"               { return _ELSE; }
 "return"             { return _RETURN; }
+"for"             { return _FOR; }
 
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }
@@ -24,6 +25,7 @@
 "="                  { return _ASSIGN; }
 "?"                  { return _QMARK; }
 ":"                  { return _COLON; }
+"++"                  { return _INC; }
 
 "+"                  { yylval.i = ADD; return _AROP; }
 "-"                  { yylval.i = SUB; return _AROP; }

@@ -42,6 +42,9 @@
 %token _SEMICOLON
 %token _QMARK
 %token _COLON
+%token _FOR
+%token _INC
+
 %token <i> _AROP
 %token <i> _RELOP
 
@@ -139,7 +142,45 @@ statement
   | assignment_statement
   | if_statement
   | return_statement
+  | for_statement
   ;
+
+for_statement
+ : _FOR _LPAREN _ID _ASSIGN literal
+ {
+ 	$<i>$ = ++lab_num;
+ 	int i = lookup_symbol($3,VAR|PAR);
+ 	if(i == NO_INDEX)
+          err("invalid lvalue '%s' in assignment", $3);
+        if(get_type(i) != get_type($5))
+        	err("different type");
+        gen_mov($5,i);
+        code("\n@for%d:",lab_num);
+ 	
+ } 
+ _SEMICOLON rel_exp
+ {
+ 	code("\n\t\t%s\t@exit%d",opp_jumps[$8],$<i>6);
+ }
+  _SEMICOLON _ID _INC _RPAREN statement
+ {
+	 int i = lookup_symbol($11,VAR|PAR);
+	 	if(i == NO_INDEX)
+		  err("invalid lvalue '%s' in assignment", $11);
+	if(get_type(i) == INT)
+		code("\n\t\tADDS\t");
+	else
+		code("\n\t\tADDU\t");
+	gen_sym_name(i);
+	code(",$1,");
+	gen_sym_name(i);
+	
+	code("\n\t\tJMP\t@for%d",$<i>6);
+	code("\n@exit%d:",$<i>6);
+ 	
+ }
+ 
+ ;
 
 compound_statement
   : _LBRACKET statement_list _RBRACKET
