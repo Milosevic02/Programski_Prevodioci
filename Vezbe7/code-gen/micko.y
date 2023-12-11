@@ -19,7 +19,10 @@
   int fun_idx = -1;
   int fcall_idx = -1;
   int lab_num = -1;
+  int inc_num = 0;
+  int inc_array[100];
   FILE *output;
+  
 %}
 
 %union {
@@ -196,6 +199,19 @@ assignment_statement
           if(get_type(idx) != get_type($3))
             err("incompatible types in assignment");
         gen_mov($3, idx);
+        
+        for(int i = 0;i<inc_num;i++){
+        	if(get_type(inc_array[i]) == UINT){
+        		code("\n\t\tADDU\t");
+        	}else
+        		code("\n\t\tADDS\t");
+        	gen_sym_name(inc_array[i]);
+        	code(",$1,");
+        	gen_sym_name(inc_array[i]);
+        	inc_array[i] = -1;
+        }
+        inc_num = 0;
+        
       }
   ;
 
@@ -255,6 +271,20 @@ exp
   }
   | _LPAREN num_exp _RPAREN
       { $$ = $2; }
+  | _ID _INC
+  {
+  	if(lookup_symbol($1,FUN) != NO_INDEX){
+  		err("Postincrement may be only used on Var not functions");
+  	}
+  	
+  	$$ = lookup_symbol($1,VAR|PAR);
+  	
+  	if($$ == NO_INDEX){
+		err("%s is not declared",$1);
+	}
+	
+	inc_array[inc_num++] = $$;
+  }
   ;
 
 cond_exp
