@@ -19,6 +19,9 @@
   int fun_idx = -1;
   int fcall_idx = -1;
   int lab_num = -1;
+  int switch_id = -1;
+  int case_array[100];
+  int case_count = 0;
   FILE *output;
 %}
 
@@ -41,12 +44,17 @@
 %token _ASSIGN
 %token _SEMICOLON
 %token _ITERATE
+%token _SWITCH
+%token _CASE
+%token _BREAK
+%token _COLON
+%token _DEFAULT
 %token _TO
 %token <i> _AROP
 %token <i> _RELOP
 
 %type <i> num_exp exp literal
-%type <i> function_call argument rel_exp if_part
+%type <i> function_call argument rel_exp if_part default_statement
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -139,6 +147,91 @@ statement
   | if_statement
   | return_statement
   | iterator_statement
+  | switch_statement
+  ;
+  
+  
+switch_statement
+  :  _SWITCH _LPAREN _ID
+  {
+  	int i = lookup_symbol($3, VAR|PAR);
+        if(i == NO_INDEX)
+          err("Not declared '%s'", $3);
+        switch_id = i;
+        lab_num++;
+        code("\n@switch%d:",lab_num);
+        code("\n\t\tJMP \t@test%d",lab_num);
+  }
+  _RPAREN _LBRACKET case_statements default_statement _RBRACKET
+  {
+  	code("\n\t\tJMP \t@exit%d",lab_num);
+  	code("\n@test%d:",lab_num);
+  	int i;
+  	for(i = 0;i<case_count;i++){
+  		gen_cmp(switch_id,case_array[i]);
+  		case_array[i] = -1;
+  		code("\n\t\tJEQ \t");
+  		code("@case%d_%d",lab_num,i);
+  	} 
+  	
+  	if($8)
+  		code("\n\t\tJMP \t@default%d",lab_num);
+  	code("\n@exit%d:",lab_num);
+  	case_count = 0;
+  }
+  
+  ;
+  
+case_statements
+  : case_statement
+  | case_statements case_statement
+  ;
+  
+case_statement
+  : _CASE literal _COLON
+  {
+  	int i = 0;
+  	while(i<case_count){
+  		if($2 == case_array[i]){
+  			err("duplicated constant in case");
+  			break;
+  		}
+  		i++;
+  		
+  	}
+  	
+  	if(i == case_count){
+  		case_array[i] = $2;
+  		code("\n@case%d_%d:",lab_num,case_count);
+  		case_count++;
+  		
+  	}
+  	if(get_type($2) != get_type(switch_id))
+  		err("wrong type of constant");
+  }  statement break_statement
+  ;
+  
+break_statement
+ :
+ | _BREAK _SEMICOLON
+ {
+ 	code("\n\t\tJMP \t@exit%d",lab_num);
+ }
+ ;
+ 
+default_statement
+  : 
+  {
+  	$$ = 0;
+  }
+  | _DEFAULT _COLON 
+  {
+  	code("\n@default%d: ",lab_num);
+  }
+  statement
+  {
+  	$$ = 1;
+  }
   ;
   
 iterator_statement

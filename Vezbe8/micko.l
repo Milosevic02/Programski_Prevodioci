@@ -17,7 +17,12 @@
 "return"             { return _RETURN; }
 "iterate"             { return _ITERATE; }
 "to"                 { return _TO; }
+"switch"                 { return _SWITCH; }
+"case"                 { return _CASE; }
+"break"                 { return _BREAK; }
+"default"                 { return _DEFAULT; }
 
+":"                 { return _COLON; }
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }
 "{"                  { return _LBRACKET; }
