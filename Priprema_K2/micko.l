@@ -15,6 +15,11 @@
 "if"                 { return _IF; }
 "else"               { return _ELSE; }
 "return"             { return _RETURN; }
+"petljaj"             { return _PETLJAJ; }
+"u opsegu od"             { return _OPSEG; }
+"do"             { return _DO; }
+":"             { return _COLON; }
+
 
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }

@@ -40,6 +40,10 @@
 %token _RBRACKET
 %token _ASSIGN
 %token _SEMICOLON
+%token _COLON
+%token _DO
+%token _OPSEG
+%token _PETLJAJ
 %token <i> _AROP
 %token <i> _RELOP
 
@@ -136,6 +140,73 @@ statement
   | assignment_statement
   | if_statement
   | return_statement
+  | petljaj_statement
+  ;
+  
+petljaj_statement
+  : _PETLJAJ _ID
+  {
+  	int idx = lookup_symbol($2, VAR|PAR);
+        if(idx == NO_INDEX)
+          err("invalid lvalue '%s' in assignment", $2);
+        
+  } 
+  _OPSEG literal
+  {
+    	int idx = lookup_symbol($2, VAR|PAR);
+    	if(get_type(idx) != get_type($5))
+    		err("Different type");
+    	gen_mov($5,idx);
+    	$<i>$ = ++lab_num;
+    	code("\n@petljaj_%d:",$<i>$);
+  	
+  }
+   _DO literal
+   {
+     	int idx = lookup_symbol($2, VAR|PAR);
+   	if(get_type($5) != get_type($8))
+   		err("Literals different type");
+   	gen_cmp(idx,$8);
+   	if(atoi(get_name($5)) > atoi(get_name($8))){
+   		if(get_type($5) == INT){
+   			code("\n\t\tJLTS @petljaj_exit%d",$<i>6);
+   		}else{
+   		   	code("\n\t\tJLTU @petljaj_exit%d",$<i>6);
+   		}
+   	}else{
+   		if(get_type($5) == INT){
+   			code("\n\t\tJGTS\t@petljaj_exit%d",$<i>6);
+   		}else{
+   		   	code("\n\t\tJGTU\t@petljaj_exit%d",$<i>6);
+   		}
+   	}
+   }
+    _COLON statement
+    {
+        int idx = lookup_symbol($2, VAR|PAR);
+    	if(atoi(get_name($5)) > atoi(get_name($8))){
+   		if(get_type($5) == INT){
+   			code("\n\t\tSUBS\t");
+   		}else{
+   		   	code("\n\t\tSUBU\t");
+   		}
+   		gen_sym_name(idx);
+   		code(" , $1 , ");
+   		gen_sym_name(idx);
+   	}else{
+   		if(get_type($5) == INT){
+   			code("\n\t\tADDS\t");
+   		}else{
+   		   	code("\n\t\tADDU\t");
+   		}
+   		gen_sym_name(idx);
+   		code(" , $1 , ");
+   		gen_sym_name(idx);
+   	}
+   	code("\n\tJMP\t@petljaj_%d",$<i>6);
+   	code("\n\t@petljaj_exit%d:",$<i>6);
+    	
+    }
   ;
 
 compound_statement
